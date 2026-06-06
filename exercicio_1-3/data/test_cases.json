@@ -1,0 +1,27 @@
+[
+  {
+    "id": "TC-01",
+    "question": "Qual o prazo de devolucao?",
+    "expected_chunks": ["POL-001-A", "POL-001-B"]
+  },
+  {
+    "id": "TC-02",
+    "question": "Posso devolver carga perigosa?",
+    "expected_chunks": ["POL-001-B"]
+  },
+  {
+    "id": "TC-03",
+    "question": "Qual o SLA do cliente Gold?",
+    "expected_chunks": ["SLA-2024-B"]
+  },
+  {
+    "id": "TC-04",
+    "question": "Frete para 600kg para Manaus?",
+    "expected_chunks": ["PROC-042v2-B", "PROC-042v2-A"]
+  },
+  {
+    "id": "TC-05",
+    "question": "Qual o multiplicador para o Sudeste?",
+    "expected_chunks": ["PROC-042v2-B"]
+  }
+]
