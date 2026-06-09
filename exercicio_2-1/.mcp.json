@@ -1,0 +1,77 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schema/mcp.json",
+  "servers": {
+    "github": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}",
+        "GITHUB_REPOSITORY": "db1/novatech-assistant"
+      }
+    },
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "./src",
+        "./specs",
+        "./skills",
+        "./docs",
+        "./prompts",
+        "./tests"
+      ]
+    },
+    "azure-ai-search": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["./tools/mcp-servers/azure-ai-search/dist/index.js"],
+      "env": {
+        "AZURE_AI_SEARCH_ENDPOINT": "${AZURE_AI_SEARCH_ENDPOINT}",
+        "AZURE_AI_SEARCH_INDEX": "novatech-docs",
+        "AZURE_TENANT_ID": "${AZURE_TENANT_ID}",
+        "AZURE_CLIENT_ID": "${AZURE_CLIENT_ID}",
+        "AZURE_CLIENT_SECRET": "${AZURE_CLIENT_SECRET}"
+      }
+    },
+    "azure-openai": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["./tools/mcp-servers/azure-openai/dist/index.js"],
+      "env": {
+        "AZURE_OPENAI_ENDPOINT": "${AZURE_OPENAI_ENDPOINT}",
+        "AZURE_OPENAI_API_VERSION": "${AZURE_OPENAI_API_VERSION}",
+        "AZURE_OPENAI_DEPLOYMENT_CHAT": "gpt-4o",
+        "AZURE_OPENAI_DEPLOYMENT_EMBEDDING": "text-embedding-ada-002",
+        "AZURE_OPENAI_DEPLOYMENT_EVAL": "gpt-4o-mini",
+        "AZURE_TENANT_ID": "${AZURE_TENANT_ID}",
+        "AZURE_CLIENT_ID": "${AZURE_CLIENT_ID}",
+        "AZURE_CLIENT_SECRET": "${AZURE_CLIENT_SECRET}"
+      }
+    },
+    "azure-devops": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@microsoft/mcp-server-azure-devops"],
+      "env": {
+        "AZURE_DEVOPS_ORG": "db1",
+        "AZURE_DEVOPS_PROJECT": "NovaTech",
+        "AZURE_DEVOPS_PAT": "${AZURE_DEVOPS_PAT}"
+      }
+    },
+    "confluence": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@mcp-server/confluence"],
+      "env": {
+        "CONFLUENCE_BASE_URL": "${CONFLUENCE_BASE_URL}",
+        "CONFLUENCE_EMAIL": "${CONFLUENCE_EMAIL}",
+        "CONFLUENCE_API_TOKEN": "${CONFLUENCE_API_TOKEN}",
+        "CONFLUENCE_ALLOWED_SPACES": "NovaTech,Policies",
+        "CONFLUENCE_READ_ONLY": "true"
+      }
+    }
+  }
+}
