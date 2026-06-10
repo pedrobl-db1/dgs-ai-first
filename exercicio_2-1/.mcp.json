@@ -1,17 +1,6 @@
 {
-  "$schema": "https://modelcontextprotocol.io/schema/mcp.json",
-  "servers": {
-    "github": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
-      "env": {
-        "GITHUB_TOKEN": "${GITHUB_TOKEN}",
-        "GITHUB_REPOSITORY": "db1/novatech-assistant"
-      }
-    },
+  "mcpServers": {
     "filesystem": {
-      "type": "stdio",
       "command": "npx",
       "args": [
         "-y",
@@ -19,59 +8,46 @@
         "./src",
         "./specs",
         "./skills",
-        "./docs",
         "./prompts",
-        "./tests"
-      ]
+        "./tests",
+        "./infra"
+      ],
+      "description": "Código-fonte, specs SDD, skills, prompts versionados, testes e infra. Leitura e escrita — artefatos editáveis pelo time."
     },
-    "azure-ai-search": {
-      "type": "stdio",
-      "command": "node",
-      "args": ["./tools/mcp-servers/azure-ai-search/dist/index.js"],
-      "env": {
-        "AZURE_AI_SEARCH_ENDPOINT": "${AZURE_AI_SEARCH_ENDPOINT}",
-        "AZURE_AI_SEARCH_INDEX": "novatech-docs",
-        "AZURE_TENANT_ID": "${AZURE_TENANT_ID}",
-        "AZURE_CLIENT_ID": "${AZURE_CLIENT_ID}",
-        "AZURE_CLIENT_SECRET": "${AZURE_CLIENT_SECRET}"
-      }
-    },
-    "azure-openai": {
-      "type": "stdio",
-      "command": "node",
-      "args": ["./tools/mcp-servers/azure-openai/dist/index.js"],
-      "env": {
-        "AZURE_OPENAI_ENDPOINT": "${AZURE_OPENAI_ENDPOINT}",
-        "AZURE_OPENAI_API_VERSION": "${AZURE_OPENAI_API_VERSION}",
-        "AZURE_OPENAI_DEPLOYMENT_CHAT": "gpt-4o",
-        "AZURE_OPENAI_DEPLOYMENT_EMBEDDING": "text-embedding-ada-002",
-        "AZURE_OPENAI_DEPLOYMENT_EVAL": "gpt-4o-mini",
-        "AZURE_TENANT_ID": "${AZURE_TENANT_ID}",
-        "AZURE_CLIENT_ID": "${AZURE_CLIENT_ID}",
-        "AZURE_CLIENT_SECRET": "${AZURE_CLIENT_SECRET}"
-      }
-    },
-    "azure-devops": {
-      "type": "stdio",
+    "filesystem-docs": {
       "command": "npx",
-      "args": ["-y", "@microsoft/mcp-server-azure-devops"],
-      "env": {
-        "AZURE_DEVOPS_ORG": "db1",
-        "AZURE_DEVOPS_PROJECT": "NovaTech",
-        "AZURE_DEVOPS_PAT": "${AZURE_DEVOPS_PAT}"
-      }
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "./docs/novatech/"
+      ],
+      "description": "Documentação de negócio da NovaTech (políticas, SLAs, FAQs, procedimentos). SOMENTE LEITURA — fonte da verdade do negócio, não deve ser alterada via IA."
     },
-    "confluence": {
-      "type": "stdio",
+    "filesystem-corpus": {
       "command": "npx",
-      "args": ["-y", "@mcp-server/confluence"],
-      "env": {
-        "CONFLUENCE_BASE_URL": "${CONFLUENCE_BASE_URL}",
-        "CONFLUENCE_EMAIL": "${CONFLUENCE_EMAIL}",
-        "CONFLUENCE_API_TOKEN": "${CONFLUENCE_API_TOKEN}",
-        "CONFLUENCE_ALLOWED_SPACES": "NovaTech,Policies",
-        "CONFLUENCE_READ_ONLY": "true"
-      }
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "./data/retrieval-corpus/"
+      ],
+      "description": "Corpus de chunks pré-indexados para retrieval simulado (substitui Azure AI Search em dev). SOMENTE LEITURA — gerado exclusivamente pelo pipeline de ingestão."
+    },
+    "git": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-git",
+        "--repository",
+        "."
+      ],
+      "description": "Histórico de commits, diffs e branches do repositório local. Somente leitura — operações de escrita (commit, push) permanecem sob controle humano."
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "description": "Grafo de conhecimento persistente para decisões arquiteturais, linguagem ubíqua do domínio e contexto entre sessões. Isolado do filesystem."
     }
   }
 }
